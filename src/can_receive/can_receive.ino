@@ -38,9 +38,8 @@ void loop()
     // Se uma interrupção ocorreu interrupção (CAN_INT pino = 0), lê o buffer de recepção
     if (!digitalRead(CAN_INT))
     {
-        // Lê os dados: mID = identificador, mDLC = comprimento, mDATA = dados do
-        freame
-            CAN1.readMsgBuf(&mID, &mDLC, mDATA);
+        // Lê os dados: mID = identificador, mDLC = comprimento, mDATA = dados do frame
+        CAN1.readMsgBuf(&mID, &mDLC, mDATA);
         // Determina se o frame é do tipo standard (11 bits) ou estendido (29 bits)
         if ((mID & CAN_IS_EXTENDED) == CAN_IS_EXTENDED)
         {
