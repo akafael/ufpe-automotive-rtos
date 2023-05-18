@@ -43,5 +43,5 @@ ${PROJECT_HEX}: ${PROJECT_DIR}/make.py
 	$<
 
 clean: ${PROJECT_DIR}/make.py
-	cd ${PROJECT_DIR} &&\
-	$< clean
+	cd ${PROJECT_DIR} && $< clean
+	rm ${PROJECT_DIR}/${PROJECT_NAME} ${PROJECT_DIR}/*.hex -rvf
