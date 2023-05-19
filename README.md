@@ -1,12 +1,12 @@
-# ufpe_automotive_rtos
-Class Project
+# UFPE - Real Time Automotive OS Applications
+Class Project 
 
 ## Requirements
  * Arduino
  * [TrampolineRTOS](https://github.com/TrampolineRTOS/trampoline)
  * [MCP CAN lib](https://github.com/akafael/MCP_CAN_lib)
 
-### Ubuntu / WLS
+### Compiling on Ubuntu / WSL
 
 Install dependences
 ```bash

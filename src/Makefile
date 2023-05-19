@@ -24,13 +24,15 @@ GOIL_TARGET=avr/arduino/uno
 # Arduino
 TRAMPOLINE_ARDUINO_DIR=${TRAMPOLINE_DIR}/machines/avr/arduino
 
-#PROJECT_NAME=trampoline_blink
-#PROJECT_DIR=${TRAMPOLINE_DIR}/examples/avr/arduinoUno/${PROJECT_NAME}
+# Project names
 PROJECT_NAME=trampoline_blink
+PROJECT_BIN_NAME=trampuinoBlink
+
+# Project Source Files
 PROJECT_DIR=${MAKEFILE_DIR}/${PROJECT_NAME}
 PROJECT_SRC=${PROJECT_DIR}/${PROJECT_NAME}.cpp
 PROJECT_OIL=${PROJECT_DIR}/${PROJECT_NAME}.oil
-PROJECT_HEX=${PROJECT_DIR}/${PROJECT_NAME}.hex
+PROJECT_HEX=${PROJECT_DIR}/${PROJECT_BIN_NAME}.hex
 
 ###############################################################################
 # Rules
@@ -38,27 +40,63 @@ PROJECT_HEX=${PROJECT_DIR}/${PROJECT_NAME}.hex
 
 target: ${PROJECT_HEX}
 
+# Goil Files rules ------------------------------------------------------------
+
 # Build goil files
-${PROJECT_DIR}/make.py: ${PROJECT_OIL} ${PROJECT_SRC} ${GOIL_BIN} ${TRAMPOLINE_ARDUINO_DIR}
+.PHONY: goil_build
+goil_build: ${PROJECT_OIL} ${PROJECT_SRC} ${GOIL_BIN} ${TRAMPOLINE_ARDUINO_DIR}
 	cd ${PROJECT_DIR} &&\
 	${GOIL_BIN} --target=${GOIL_TARGET} --templates=${GOIL_TEMPLATE_DIR} $(notdir $<)
 
+# Generated build scripts from goil source file
+${PROJECT_DIR}/build.py: goil_build
+${PROJECT_DIR}/make.py: goil_build
+
+# Project Build rules ---------------------------------------------------------
+
 # Build Project
-${PROJECT_HEX}: ${PROJECT_DIR}/make.py
+.PHONY: build
+build: ${PROJECT_HEX}
+
+${PROJECT_HEX}: ${PROJECT_DIR}/make.py ${PROJECT_DIR}/build.py
 	cd ${PROJECT_DIR} &&\
-	$<
+	${PROJECT_DIR}/make.py
+
+# Trampoline Install rules ----------------------------------------------------
 
 # Install Goil
+.PHONY: install_goil
+install_goil: ${GOIL_BIN}
+
 ${GOIL_BIN}: ${GOIL_FOLDER}/build.py
 	cd ${GOIL_FOLDER} &&\
-	python3 $<
+	python3 ${GOIL_FOLDER}/build.py
 
 # Install Arduino Core Lib
-${TRAMPOLINE_ARDUINO_DIR}:${TRAMPOLINE_DIR}
-	cd $< &&\
-	git submodule init &&\
-	git submodule update machines/avr/arduino --recursive
+.PHONY: install_arduino_lib
+install_arduino_lib: ${TRAMPOLINE_ARDUINO_DIR}
 
+${TRAMPOLINE_ARDUINO_DIR}:${TRAMPOLINE_DIR}
+	cd ${TRAMPOLINE_DIR} &&\
+	git submodule init &&\
+	git submodule update --recursive machines/avr/arduino
+
+# General rules ---------------------------------------------------------------
+
+# Remove Generated Files
+.PHONY: clean
 clean: ${PROJECT_DIR}/make.py
-	cd ${PROJECT_DIR} && $< clean
-	rm ${PROJECT_DIR}/${PROJECT_NAME} ${PROJECT_DIR}/*.hex -rvf
+	cd ${PROJECT_DIR} &&\
+    ${PROJECT_DIR}/make.py clean
+	rm -rvf ${PROJECT_DIR}/make.py ${PROJECT_DIR}/build.py \
+	   ${PROJECT_DIR}/${PROJECT_NAME} \
+	   ${PROJECT_DIR}/${PROJECT_BIN_NAME}.hex \
+	   ${PROJECT_DIR}/${PROJECT_BIN_NAME}
+
+# Print help for Makefile commands
+.PHONY: help
+help:
+	@echo "Use: make -f Makefile [OPTION]"
+	@echo "\nOPTIONS"
+	@sed Makefile -n -e "N;s/^# \(.*\)\n.PHONY:\(.*\)/ \2:\1/p;D" | column -ts:
+	@echo ""
