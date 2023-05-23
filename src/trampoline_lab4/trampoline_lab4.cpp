@@ -5,6 +5,7 @@
 
 void setup()
 {
+	Serial.begin(115200); //115200 bps, 8N1
 	// initialize digital pin 13 as an output.
 	pinMode(13, OUTPUT);
 }

@@ -12,7 +12,7 @@ CPU test {
     STATUS = STANDARD;
     BUILD = TRUE {
       TRAMPOLINE_BASE_PATH = "../../lib/trampoline";
-      APP_NAME = "trampuinoLab4";
+      APP_NAME = "trampuinoApp";
       APP_SRC = "trampoline_lab4.cpp";
       CPPCOMPILER = "avr-g++";
       COMPILER = "avr-gcc";
@@ -20,6 +20,9 @@ CPU test {
       ASSEMBLER = "avr-gcc";
       COPIER = "avr-objcopy";
       SYSTEM = PYTHON;
+
+      LIBRARY = serial;
+
     };
     SYSTEM_CALL = TRUE;
   };

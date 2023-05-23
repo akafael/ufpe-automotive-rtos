@@ -1,5 +1,6 @@
 /**
- * Dual Process  - Blink
+ * Dual Process Blink
+ *  one process turn the light on and other turn the light off.
  *  see: oil for time schedule specs
  */
 
