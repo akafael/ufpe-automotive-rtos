@@ -34,6 +34,10 @@ PROJECT_SRC=${PROJECT_DIR}/${PROJECT_NAME}.cpp
 PROJECT_OIL=${PROJECT_DIR}/${PROJECT_NAME}.oil
 PROJECT_HEX=${PROJECT_DIR}/${PROJECT_BIN_NAME}.hex
 
+# SETTINGS
+TARGET_PORT=/dev/ttyACM0
+
+
 ###############################################################################
 # Rules
 ###############################################################################
@@ -80,6 +84,14 @@ ${TRAMPOLINE_ARDUINO_DIR}:${TRAMPOLINE_DIR}
 	cd ${TRAMPOLINE_DIR} &&\
 	git submodule init &&\
 	git submodule update --recursive machines/avr/arduino
+
+# Upload ----------------------------------------------------------------------
+
+# Upload trampoline code to target
+.PHONY: upload
+upload: ${PROJECT_HEX} ${PROJECT_DIR}/make.py
+	cd ${PROJECT_DIR} &&\
+	export AVRDUDE_PORT="${TARGET_PORT}"; ${PROJECT_DIR}/make.py flash
 
 # General rules ---------------------------------------------------------------
 
