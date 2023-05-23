@@ -1,4 +1,16 @@
-# Basic blink Example using Trampoline
+# Multiple tasks with Serial Example
+
+## Requirements
+
+
+| Task | Pri |  type  | Period | Description                  |
+|------|-----|--------|--------|------------------------------|
+|  T1  |  5  | cyclic |   500  | Print how often was executed |
+|  T2  | 10  | cyclic |   750  | Print how often was executed |
+|  T3  | 15  | cyclic |  1200  | Print how often was executed |
+|  T4  | 99  | cyclic |  1500  | Print all other task state.  |
+
+## Setup
 
 First compile your application (oil+compilation):
 
