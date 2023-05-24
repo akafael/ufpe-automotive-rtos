@@ -13,7 +13,9 @@ void setup() {
 }
 
 TASK(periodicTaskProducer) {
+  GetResource(resBuffer);
   buffer = (buffer < maxBufferSize) ? buffer + 1 : maxBufferSize;
+  ReleaseResource(resBuffer);
 
   Serial.print("P: ");
   Serial.println(buffer);
@@ -22,7 +24,9 @@ TASK(periodicTaskProducer) {
 }
 
 TASK(periodicTaskConsumer) {
+  GetResource(resBuffer);
   buffer = (buffer > 0) ? buffer - 1 : buffer;
+  ReleaseResource(resBuffer);
 
   Serial.print("C: ");
   Serial.println(buffer);

@@ -7,7 +7,7 @@
 #include "Arduino.h"
 #include "tpl_os.h"
 
-enum TASKS { T1 = 0, T2 = 1, T3 = 2, T4 = 3 };
+enum TASK_IDS { T1 = 0, T2 = 1, T3 = 2, T4 = 3 };
 int taskState[4] = {0, 0, 0, 0};
 
 void setup() {

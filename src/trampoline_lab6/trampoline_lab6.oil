@@ -58,6 +58,7 @@ CPU test {
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
+    RESOURCE = resBuffer;
     STACKSIZE = 256;
   };
 
@@ -66,6 +67,12 @@ CPU test {
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
+    RESOURCE = resBuffer;
     STACKSIZE = 256;
+  };
+
+  RESOURCE resBuffer
+  {
+    RESOURCEPROPERTY = STANDARD;
   };
 };
