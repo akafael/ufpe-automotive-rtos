@@ -25,8 +25,8 @@ GOIL_TARGET=avr/arduino/uno
 TRAMPOLINE_ARDUINO_DIR=${TRAMPOLINE_DIR}/machines/avr/arduino
 
 # Project names
-PROJECT_NAME=trampoline_blink
-PROJECT_BIN_NAME=trampuinoBlink
+PROJECT_NAME=trampoline_can
+PROJECT_BIN_NAME=trampuinoApp
 
 # Project Source Files
 PROJECT_DIR=${MAKEFILE_DIR}/${PROJECT_NAME}
@@ -48,7 +48,7 @@ target: ${PROJECT_HEX}
 
 # Build goil files
 .PHONY: goil_build
-goil_build: ${PROJECT_OIL} ${PROJECT_SRC} ${GOIL_BIN} ${TRAMPOLINE_ARDUINO_DIR}
+goil_build: ${PROJECT_OIL} ${PROJECT_SRC} install_goil install_arduino_lib
 	cd ${PROJECT_DIR} &&\
 	${GOIL_BIN} --target=${GOIL_TARGET} --templates=${GOIL_TEMPLATE_DIR} $(notdir $<)
 
@@ -62,7 +62,7 @@ ${PROJECT_DIR}/make.py: goil_build
 .PHONY: build
 build: ${PROJECT_HEX}
 
-${PROJECT_HEX}: ${PROJECT_DIR}/make.py ${PROJECT_DIR}/build.py
+${PROJECT_HEX}: goil_build
 	cd ${PROJECT_DIR} &&\
 	${PROJECT_DIR}/make.py
 
@@ -97,7 +97,7 @@ upload: ${PROJECT_HEX} ${PROJECT_DIR}/make.py
 
 # Remove Generated Files
 .PHONY: clean
-clean: ${PROJECT_DIR}/make.py
+clean:
 	cd ${PROJECT_DIR} &&\
     ${PROJECT_DIR}/make.py clean
 	rm -rvf ${PROJECT_DIR}/make.py ${PROJECT_DIR}/build.py \
