@@ -1,3 +1,7 @@
 [submodule "lib/mcp_can"]
 	path = lib/mcp_can
 	url = https://github.com/akafael/MCP_CAN_lib
+[submodule "lib/trampoline"]
+	path = lib/trampoline
+	url = git@github.com:akafael/trampoline.git
+	branch = ufpe-rtos
