@@ -7,7 +7,7 @@ Basic Application for comunication using can module.
 First compile your application (oil+compilation):
 
 ```sh
-goil --target=avr/arduino/uno --templates=../../lib/trampoline/goil/templates/ trampoline_can.oil
+goil --target=avr/arduino/uno --templates=../../lib/trampoline/goil/templates/ trampoline_can_send.oil
 ```
 then compilation:
 ```

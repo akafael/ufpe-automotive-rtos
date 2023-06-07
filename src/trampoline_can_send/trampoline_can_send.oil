@@ -13,7 +13,7 @@ CPU test {
     BUILD = TRUE {
       TRAMPOLINE_BASE_PATH = "../../lib/trampoline";
       APP_NAME = "trampuinoApp";
-      APP_SRC = "trampoline_can.cpp";
+      APP_SRC = "trampoline_can_send.cpp";
       CPPCOMPILER = "avr-g++";
       COMPILER = "avr-gcc";
       LINKER = "avr-gcc";

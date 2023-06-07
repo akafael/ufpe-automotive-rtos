@@ -1,4 +1,4 @@
-# Basic blink Example using Trampoline
+# Serial Read and Send example
 
 First compile your application (oil+compilation):
 

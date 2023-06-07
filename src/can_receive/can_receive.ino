@@ -7,12 +7,17 @@
 #include <mcp_can.h>
 #include <SPI.h>
 #include "Board.h"
+
+#define PIN_CAN_CS 10
+#define CAN_INT 2
+
 // Variavel para armazenar informacoes do frame recebido
 unsigned char mDLC = 0;
 unsigned char mDATA[8];
 long unsigned int mID;
 char msgString[128];
-MCP_CAN CAN1(CAN1_CS);
+
+MCP_CAN CAN1(PIN_CAN_CS);
 
 void setup()
 {
