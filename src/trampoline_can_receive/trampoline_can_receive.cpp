@@ -7,63 +7,64 @@
 #include <SPI.h>
 #include <mcp_can.h>
 
-#define PIN_CAN_CS 10
-#define PIN_CAN_INT 2
-
-// Variavel para armazenar informacoes do frame recebido
-unsigned char mDLC = 0;
-unsigned char mDATA[8];
-long unsigned int mID;
-char msgString[128];
-
-MCP_CAN CAN_DEV(PIN_CAN_CS);
+#define CAN_SPI_INT 2 // Set INT to pin 2
+MCP_CAN CAN_SPI(10);  // Set CS to pin 10
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-
   Serial.begin(115200);
-  if (CAN_DEV.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ) != CAN_OK) {
-    delay(200);
-  }
-  Serial.println("Modulo CAN inicializado!");
 
-  CAN_DEV.setMode(MCP_NORMAL);
+  // Initialize MCP2515 running at 16MHz with a baudrate of 500kb/s and the
+  // masks and filters disabled.
+  if (CAN_SPI.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK)
+    Serial.println("MCP2515 Initialized Successfully!");
+  else
+    Serial.println("Error Initializing MCP2515...");
 
-  pinMode(PIN_CAN_INT, INPUT);
+  CAN_SPI.setMode(MCP_NORMAL); // Set operation mode to normal so the MCP2515
+                               // sends acks to received data.
 
-  Serial.println("MCP2515 exemplo can_receive...");
-  Serial.print("ID\t\tType\tDLC\tByte0\tByte1\tByte2");
-  Serial.println("\tByte3\tByte4\tByte5\tByte6\tByte7");
+  pinMode(CAN_SPI_INT, INPUT); // Configuring pin for /INT input
+
+  Serial.println("MCP2515 Library Receive Example...");
 }
 
 /**
  * Send msg through CAN
  */
 TASK(periodicTask) {
-  // Se uma interrupção ocorreu interrupção (PIN_CAN_INT pino = 0), lê o buffer
-  // de recepção
-  if (!digitalRead(PIN_CAN_INT)) {
-    // Lê os dados: mID = identificador, mDLC = comprimento, mDATA = dados do
-    // frame
-    CAN_DEV.readMsgBuf(&mID, &mDLC, mDATA);
-    // Determina se o frame é do tipo standard (11 bits) ou estendido (29 bits)
-    if ((mID & CAN_IS_EXTENDED) == CAN_IS_EXTENDED) {
-      sprintf(msgString, "0x%.8lX\t\tExt\t[%1d]\t", (mID & CAN_EXTENDED_ID),
-              mDLC);
-    } else {
-      sprintf(msgString, "0x%.3lX\t\tStd\t[%1d]\t", mID, mDLC);
-    }
+  // If CAN_SPI_INT pin is low, read receive buffer
+  if (!digitalRead(CAN_SPI_INT)) {
+    long unsigned int rxId;
+    unsigned char len = 0;
+    unsigned char rxBuf[8];
+
+    // Read data: len = data length, buf = data byte(s)
+    CAN_SPI.readMsgBuf(&rxId, &len, rxBuf);
+
+    char msgString[128]; // Array to store serial string
+
+    if ((rxId & 0x80000000) == 0x80000000) // Determine if ID is standard (11
+                                           // bits) or extended (29 bits)
+      sprintf(msgString,
+              "Extended ID: 0x%.8lX  DLC: %1d  Data:", (rxId & 0x1FFFFFFF),
+              len);
+    else
+      sprintf(msgString, "Standard ID: 0x%.3lX       DLC: %1d  Data:", rxId,
+              len);
+
     Serial.print(msgString);
-    // Verifica se a mensagem é do tipo de requisição remota.
-    if ((mID & CAN_IS_REMOTE_REQUEST) == CAN_IS_REMOTE_REQUEST) {
-      sprintf(msgString, "rrf");
+
+    if ((rxId & 0x40000000) ==
+        0x40000000) { // Determine if message is a remote request frame.
+      sprintf(msgString, " REMOTE REQUEST FRAME");
       Serial.print(msgString);
     } else {
-      for (byte i = 0; i < mDLC; i++) {
-        sprintf(msgString, "0x%.2X\t", mDATA[i]);
+      for (byte i = 0; i < len; i++) {
+        sprintf(msgString, " 0x%.2X", rxBuf[i]);
         Serial.print(msgString);
       }
     }
+
     Serial.println();
   }
 

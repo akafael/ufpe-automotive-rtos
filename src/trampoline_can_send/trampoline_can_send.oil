@@ -31,13 +31,13 @@ CPU test {
   APPMODE stdAppmode {};
   
   ALARM periodicAl {
-    COUNTER= SystemCounter;
+    COUNTER= SystemCounter; // Arduino Timer - 1024μs period on a 16MHz chip
     ACTION = ACTIVATETASK {
       TASK = periodicTask;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 1000; //activated each 1024 ms
-      CYCLETIME = 1000; //activated each 1024 ms
+      ALARMTIME = 1000;
+      CYCLETIME = 500;
       APPMODE = stdAppmode;
     };
   };
@@ -45,6 +45,15 @@ CPU test {
   TASK periodicTask {
     PRIORITY = 20;
     AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+    STACKSIZE = 256;
+  };
+
+
+  TASK taskStartMCP {
+    PRIORITY = 100;
+    AUTOSTART = TRUE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
     STACKSIZE = 256;

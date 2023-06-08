@@ -36,8 +36,8 @@ CPU test {
       TASK = periodicTask;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 1000; //activated each 1024 ms
-      CYCLETIME = 1000; //activated each 1024 ms
+      ALARMTIME = 500; // activated first after 500*1024 us
+      CYCLETIME = 200; // activated each 200*1024 us
       APPMODE = stdAppmode;
     };
   };

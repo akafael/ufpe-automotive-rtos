@@ -1,5 +1,7 @@
 /**
  * CAN Comunication using the MCP 2515 module
+ *  ref:
+ * https://ww1.microchip.com/downloads/en/DeviceDoc/MCP2515-Stand-Alone-CAN-Controller-with-SPI-20001801J.pdf
  */
 
 #include "Arduino.h"
@@ -7,33 +9,47 @@
 #include <SPI.h>
 #include <mcp_can.h>
 
-#define PIN_CAN_CS 10
-
-byte mDATA[8] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-MCP_CAN CAN_DEV(PIN_CAN_CS);
+MCP_CAN CAN_SPI(10); // Set CS to pin 10
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-
   Serial.begin(115200);
-  while (CAN_DEV.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ) != CAN_OK) {
-    delay(500);
-    Serial.println("Erro ao inicializar o MCP2515...");
-  }
-  Serial.println("MCP2515 can_send inicializado com sucesso!");
-  CAN_DEV.setMode(MCP_NORMAL);
+
+  // Initialize MCP2515 running at 16MHz with a baudrate of 500kb/s and the
+  // masks and filters disabled.
+  if (CAN_SPI.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK)
+    Serial.println("MCP2515 Initialized Successfully!");
+  else
+    Serial.println("Error Initializing MCP2515...");
+
+  CAN_SPI.setMode(MCP_NORMAL);
+}
+
+/**
+ * Initialize comunication with MCP 2515 module
+ */
+TASK(taskStartMCP) {
+  // Initialize MCP2515 running at 16MHz with a baudrate of 500kb/s and the
+  // masks and filters disabled.
+  if (CAN_SPI.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK)
+    Serial.println("MCP2515 Initialized Successfully!");
+  else
+    Serial.println("Error Initializing MCP2515...");
+
+  TerminateTask();
 }
 
 /**
  * Send msg through CAN
  */
 TASK(periodicTask) {
-  byte sndStat = CAN_DEV.sendMsgBuf(0x100, CAN_STDID, 8, mDATA);
-
+  // send data:  ID = 0x100, Standard CAN Frame, Data length = 8 bytes, 'data' =
+  // array of data bytes to send
+  static byte data[8] = {0x00, 0x01, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07};
+  byte sndStat = CAN_SPI.sendMsgBuf(0x100, 0, 8, data);
   if (sndStat == CAN_OK) {
-    Serial.println("Mensagem enviada com sucesso!");
+    Serial.println("Message Sent Successfully!");
   } else {
-    Serial.println("Erro para enviar a mensagem...");
+    Serial.println("Error Sending Message...");
   }
 
   TerminateTask();
