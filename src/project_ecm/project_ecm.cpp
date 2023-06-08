@@ -62,7 +62,9 @@ TASK(periodicTaskReadGearMsg) {
     CAN_SPI.readMsgBuf(&rxId, &dataLenght, rxBuffer);
 
     // const uint32_t msgId = (rxId & 0x1FFFFFFF);
-    currentGear = rxBuffer[4];
+    if (rxId == IdMsgGear) {
+      currentGear = eval_gear(rxBuffer[0]);
+    }
   }
 
   Serial.print("Gear: ");
@@ -84,6 +86,14 @@ TASK(periodicTaskCalcVelocity) {
  * Send msg with Velocity value
  */
 TASK(periodicTaskSendVelocityMsg) {
+  union {
+    float value;
+    uint8_t bytes[sizeof(float)];
+  } data;
+
+  data.value = currentRPM;
+  CAN_SPI.sendMsgBuf(IdMsgVelocity, 0, sizeof(float), data.bytes);
+
   Serial.print("Velocity: ");
   Serial.println(currentVelocity);
 
@@ -94,6 +104,14 @@ TASK(periodicTaskSendVelocityMsg) {
  * Send msg with RPM value
  */
 TASK(periodicTaskSendRPMMsg) {
+  union {
+    uint16_t value;
+    uint8_t bytes[2];
+  } data;
+
+  data.value = currentRPM;
+  CAN_SPI.sendMsgBuf(IdMsgRPM, 0, 2, data.bytes);
+
   Serial.print("RPM: ");
   Serial.println(currentRPM);
 

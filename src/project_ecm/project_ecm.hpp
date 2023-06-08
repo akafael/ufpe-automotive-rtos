@@ -1,5 +1,9 @@
 #include "Arduino.h"
 
+const uint32_t IdMsgRPM = 0x0CF00400;
+const uint32_t IdMsgGear = 0x18F00503;
+const uint32_t IdMsgVelocity = 0x18FEF100;
+
 const uint8_t MaxGear = 5;
 
 /**
@@ -40,7 +44,6 @@ uint16_t eval_rpm(const uint8_t gear, const uint16_t rpm) {
  * Calculate Car velocity consering rpm and velocity values and restrictions
  */
 float calc_velocity(const uint8_t gear, const uint16_t rpm) {
-
   const uint8_t allowed_gear = eval_gear(gear);     // Validated gear value
   const uint16_t allowed_rpm = eval_rpm(gear, rpm); // Validated rpm value
 
@@ -56,6 +59,12 @@ float calc_velocity(const uint8_t gear, const uint16_t rpm) {
       1.31, // 4th gear
       1.00  // 5th gear
   };
+
+  // Set speed to zero whenever the gear is set to 0
+  if ((gear == 0) || (allowed_gear == 0) ||
+      (gearbox_ratio[allowed_gear] == 0)) {
+    return 0.0;
+  }
 
   // Car velocity
   const float velocity = (tire_radius * allowed_rpm) /
