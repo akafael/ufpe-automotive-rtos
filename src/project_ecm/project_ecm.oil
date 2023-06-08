@@ -20,7 +20,10 @@ CPU test {
       ASSEMBLER = "avr-gcc";
       COPIER = "avr-objcopy";
       SYSTEM = PYTHON;
+
       LIBRARY = serial;
+      LIBRARY = spi;
+      LIBRARY = mcp_can;
     };
     SYSTEM_CALL = TRUE;
   };
@@ -89,7 +92,7 @@ CPU test {
 
 
   TASK periodicTaskRead {
-    PRIORITY = 20;
+    PRIORITY = 50;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
@@ -97,7 +100,7 @@ CPU test {
   };
 
   TASK periodicTaskCalcVelocity {
-    PRIORITY = 20;
+    PRIORITY = 100;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
@@ -121,7 +124,7 @@ CPU test {
   };
 
   TASK periodicTaskReadGearMsg {
-    PRIORITY = 20;
+    PRIORITY = 60;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
