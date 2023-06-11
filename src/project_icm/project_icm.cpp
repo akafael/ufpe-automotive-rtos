@@ -48,9 +48,11 @@ TASK(periodicTaskReadCANMsg) {
       const uint8_t gear = decode_gearData(rxBuffer[0]);
       currentGear = eval_gear(gear);
     } else if (msgId == IdMsgRPM) {
-      // currentRPM = eval_rpm(rxBuffer[0]);
+      const uint16_t rpm = decode_rpmData(rxBuffer[1]);
+      currentRPM = eval_rpm(currentGear, rpm);
     } else if (msgId == IdMsgVelocity) {
-      // currentVelocity = calc_velocity(rxBuffer[0]);
+      const float velocity = decode_velocityData(rxBuffer[1]);
+      currentVelocity = velocity;
     }
   }
 
