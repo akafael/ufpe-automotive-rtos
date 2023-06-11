@@ -53,7 +53,7 @@ TASK(periodicTaskRead) {
  */
 TASK(periodicTaskReadGearMsg) {
   // If CAN_SPI_INT pin is low, read receive buffer
-  if (!digitalRead(CAN_SPI_INT)) {
+  if (!digitalRead(CAN_INT_PIN)) {
     uint32_t rxId;
     uint8_t dataLenght = 0;
     uint8_t rxBuffer[8];
@@ -87,11 +87,11 @@ TASK(periodicTaskCalcVelocity) {
  */
 TASK(periodicTaskSendVelocityMsg) {
   union {
-    float value;
-    uint8_t bytes[sizeof(float)];
+    uint16_t value;
+    uint8_t bytes[2];
   } data;
 
-  data.value = currentRPM;
+  data.value = encode_velocityData(currentVelocity);
   CAN_SPI.sendMsgBuf(IdMsgVelocity, 0, sizeof(data), data.bytes);
 
   Serial.print("Velocity: ");
@@ -109,7 +109,7 @@ TASK(periodicTaskSendRPMMsg) {
     uint8_t bytes[2];
   } data;
 
-  data.value = currentRPM;
+  data.value = encode_rpmData(currentRPM);
   CAN_SPI.sendMsgBuf(IdMsgRPM, 0, sizeof(data), data.bytes);
 
   Serial.print("RPM: ");

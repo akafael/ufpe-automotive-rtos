@@ -60,7 +60,7 @@ TASK(periodicTaskSendGearMsg) {
     uint8_t bytes[2];
   } gearData; // Gear Value Message Serialized
 
-  gearData.rawData = currentGear;
+  gearData.rawData = encode_gearData(currentGear);
   CAN_SPI.sendMsgBuf(IdMsgRPM, 0, sizeof(gearData), gearData.bytes);
 
   Serial.print("Gear: ");

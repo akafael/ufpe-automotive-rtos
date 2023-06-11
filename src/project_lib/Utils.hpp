@@ -70,7 +70,7 @@ float calc_velocity(const uint8_t gear, const uint16_t rpm) {
     return 0.0;
   }
 
-  // Calculated velocity
+  // Calculate velocity
   return (tire_radius * allowed_rpm) /
          (gearbox_ratio[selectedGear] * diferential_ratio);
 }
@@ -83,4 +83,24 @@ uint8_t encode_gearData(const uint8_t gear) {
 uint8_t decode_gearData(const uint8_t gear) {
   const uint8_t decodedGear = gear;
   return decodedGear;
+}
+
+uint16_t encode_velocityData(const float velocity) {
+  const uint16_t encodedVelocity = (uint16_t)velocity;
+  return encodedVelocity;
+}
+
+float decode_velocityData(const uint16_t velocity) {
+  const float decodedVelocity = (float)velocity;
+  return decodedVelocity;
+}
+
+uint16_t encode_rpmData(const uint16_t rpm) {
+  const uint16_t encodedVelocity = rpm;
+  return encodedVelocity;
+}
+
+uint16_t decode_rpmData(const uint16_t rpm) {
+  const uint16_t decodedVelocity = rpm;
+  return decodedVelocity;
 }
