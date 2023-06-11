@@ -92,7 +92,7 @@ TASK(periodicTaskSendVelocityMsg) {
   } data;
 
   data.value = currentRPM;
-  CAN_SPI.sendMsgBuf(IdMsgVelocity, 0, sizeof(float), data.bytes);
+  CAN_SPI.sendMsgBuf(IdMsgVelocity, 0, sizeof(data), data.bytes);
 
   Serial.print("Velocity: ");
   Serial.println(currentVelocity);
@@ -110,7 +110,7 @@ TASK(periodicTaskSendRPMMsg) {
   } data;
 
   data.value = currentRPM;
-  CAN_SPI.sendMsgBuf(IdMsgRPM, 0, 2, data.bytes);
+  CAN_SPI.sendMsgBuf(IdMsgRPM, 0, sizeof(data), data.bytes);
 
   Serial.print("RPM: ");
   Serial.println(currentRPM);

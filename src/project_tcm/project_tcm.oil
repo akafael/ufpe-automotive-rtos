@@ -13,7 +13,7 @@ CPU test {
     BUILD = TRUE {
       TRAMPOLINE_BASE_PATH = "../../lib/trampoline";
       APP_NAME = "trampuinoApp";
-      APP_SRC = "project_ecm.cpp";
+      APP_SRC = "project_tcm.cpp";
       CPPCOMPILER = "avr-g++";
       COMPILER = "avr-gcc";
       LINKER = "avr-gcc";
@@ -33,7 +33,7 @@ CPU test {
   ALARM periodicAlRead {
     COUNTER= SystemCounter;
     ACTION = ACTIVATETASK {
-      TASK = periodicTaskRead;
+      TASK = periodicTaskReadSerial;
     };
     AUTOSTART = TRUE {
       ALARMTIME = 200; //activated each 1024 ms
@@ -54,9 +54,7 @@ CPU test {
     };
   };
 
-
-
-  TASK periodicTaskRead {
+  TASK periodicTaskReadSerial {
     PRIORITY = 50;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
