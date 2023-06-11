@@ -13,10 +13,7 @@
 #include "../project_lib/Board.h"
 #include "../project_lib/Utils.hpp"
 
-#define PIN_CAN_SPI_INT 2 // PIN used by MCP2515 to for msg available
-#define PIN_CAN_CS 10     // PIN used as chip selector by MCP2515
-
-MCP_CAN CAN_SPI(10); // MCP2515 CAN controler with SPI interface
+MCP_CAN CAN_SPI(CAN1_CS_PIN); // MCP2515 CAN controler with SPI interface
 
 uint8_t currentGear = 0; // Current Gear number: valid numbers are [0-5]
 
@@ -31,7 +28,7 @@ void setup() {
     Serial.println("Error Initializing MCP2515...");
 
   // CAN Settings
-  pinMode(PIN_CAN_SPI_INT, INPUT); // Configuring pin for /INT input
+  pinMode(CAN_INT_PIN, INPUT); // Configuring pin for /INT input
   CAN_SPI.setMode(MCP_NORMAL); // Set operation mode to normal so the MCP2515
                                // sends acks to received msgSerialized.
 }
