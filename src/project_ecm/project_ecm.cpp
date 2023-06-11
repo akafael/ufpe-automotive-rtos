@@ -12,7 +12,7 @@
 
 MCP_CAN CAN_SPI(CAN1_CS_PIN); // MCP2515 CAN controler with SPI interface
 
-uint8_t currentGear = 0;
+uint8_t currentGear = 1;
 uint16_t currentRPM = 0;
 float currentVelocity = 0;
 
@@ -22,9 +22,9 @@ void setup() {
 
   // Start CAN Device
   if (CAN_SPI.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK)
-    Serial.println("MCP2515 Initialized Successfully!");
+    Serial.println("[ECM] MCP2515 Initialized Successfully!");
   else
-    Serial.println("Error Initializing MCP2515...");
+    Serial.println("[ECM] Error Initializing MCP2515...");
 
   // CAN Settings
   pinMode(CAN_INT_PIN, INPUT); // Configuring pin for /INT input
@@ -67,7 +67,7 @@ TASK(periodicTaskReadGearMsg) {
     }
   }
 
-  Serial.print("Gear: ");
+  Serial.print("[ECM] Gear: ");
   Serial.println(currentGear);
 
   TerminateTask();
@@ -94,7 +94,7 @@ TASK(periodicTaskSendVelocityMsg) {
   data.value = encode_velocityData(currentVelocity);
   CAN_SPI.sendMsgBuf(IdMsgVelocity, 0, sizeof(data), data.bytes);
 
-  Serial.print("Velocity: ");
+  Serial.print("[ECM] Velocity: ");
   Serial.println(currentVelocity);
 
   TerminateTask();
@@ -112,7 +112,7 @@ TASK(periodicTaskSendRPMMsg) {
   data.value = encode_rpmData(currentRPM);
   CAN_SPI.sendMsgBuf(IdMsgRPM, 0, sizeof(data), data.bytes);
 
-  Serial.print("RPM: ");
+  Serial.print("[ECM] RPM: ");
   Serial.println(currentRPM);
 
   TerminateTask();

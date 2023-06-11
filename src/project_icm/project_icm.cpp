@@ -22,9 +22,9 @@ void setup() {
 
   // Start CAN Device
   if (CAN_SPI.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK)
-    Serial.println("MCP2515 Initialized Successfully!");
+    Serial.println("[ICM] MCP2515 Initialized Successfully!");
   else
-    Serial.println("Error Initializing MCP2515...");
+    Serial.println("[ICM] Error Initializing MCP2515...");
 
   // CAN Settings
   pinMode(CAN_INT_PIN, INPUT); // Configuring pin for /INT input
@@ -60,13 +60,13 @@ TASK(periodicTaskReadCANMsg) {
 }
 
 TASK(periodicTaskPrint) {
-  Serial.print("Gear: ");
+  Serial.print("[ICM] Gear: ");
   Serial.println(currentGear);
 
-  Serial.print("RPM: ");
+  Serial.print("[ICM] RPM: ");
   Serial.println(currentRPM);
 
-  Serial.print("Velocity: ");
+  Serial.print("[ICM] Velocity: ");
   Serial.println(currentVelocity);
 
   TerminateTask();

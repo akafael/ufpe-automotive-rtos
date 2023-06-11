@@ -23,9 +23,9 @@ void setup() {
 
   // Start communication with MCP2515
   if (CAN_SPI.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK)
-    Serial.println("MCP2515 Initialized Successfully!");
+    Serial.println("[TCM] MCP2515 Initialized Successfully!");
   else
-    Serial.println("Error Initializing MCP2515...");
+    Serial.println("[TCM] Error Initializing MCP2515...");
 
   // CAN Settings
   pinMode(CAN_INT_PIN, INPUT); // Configuring pin for /INT input
@@ -44,7 +44,7 @@ TASK(periodicTaskReadSerial) {
 
     // Store new gear data
     if (rawSensorData != 0) {
-      currentGear = rawSensorData;
+      currentGear = eval_gear(rawSensorData);
     }
   }
 
@@ -56,14 +56,14 @@ TASK(periodicTaskReadSerial) {
  */
 TASK(periodicTaskSendGearMsg) {
   union msgSerialized {
-    uint16_t rawData;
-    uint8_t bytes[2];
+    uint8_t rawData;
+    uint8_t bytes[1];
   } gearData; // Gear Value Message Serialized
 
   gearData.rawData = encode_gearData(currentGear);
   CAN_SPI.sendMsgBuf(IdMsgRPM, 0, sizeof(gearData), gearData.bytes);
 
-  Serial.print("Gear: ");
+  Serial.print("[TCM] Gear: ");
   Serial.println(currentGear);
 
   TerminateTask();
