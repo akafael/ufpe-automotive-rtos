@@ -38,7 +38,7 @@ void setup() {
  */
 TASK(periodicTaskRead) {
   if (Serial.available() > 0) {
-    int32_t rawRPM = Serial.parseInt();
+    const int32_t rawRPM = Serial.parseInt();
 
     if (rawRPM > 0) {
       currentRPM = eval_rpm(currentGear, (uint16_t)rawRPM);
@@ -92,7 +92,7 @@ TASK(periodicTaskSendVelocityMsg) {
   } data;
 
   data.value = encode_velocityData(currentVelocity);
-  CAN_SPI.sendMsgBuf(IdMsgVelocity, 0, sizeof(data), data.bytes);
+  CAN_SPI.sendMsgBuf(IdMsgVelocity, CAN_EXTID, sizeof(data), data.bytes);
 
   Serial.print("[ECM] Velocity: ");
   Serial.println(currentVelocity);
@@ -110,7 +110,7 @@ TASK(periodicTaskSendRPMMsg) {
   } data;
 
   data.value = encode_rpmData(currentRPM);
-  CAN_SPI.sendMsgBuf(IdMsgRPM, 0, sizeof(data), data.bytes);
+  CAN_SPI.sendMsgBuf(IdMsgRPM, CAN_EXTID, sizeof(data), data.bytes);
 
   Serial.print("[ECM] RPM: ");
   Serial.println(currentRPM);
