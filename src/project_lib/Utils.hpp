@@ -14,7 +14,7 @@ const uint32_t IdMsgVelocity = 0x18FEF100;
  */
 uint8_t eval_gear(const uint8_t gear) {
   const uint8_t maxAllowedGear = 5;
-  const uint8_t selectedGear = (gear <= maxAllowedGear) ? gear : 0;
+  const uint8_t selectedGear = (gear <= maxAllowedGear) ? gear : maxAllowedGear;
 
   return selectedGear;
 }
@@ -95,12 +95,22 @@ float decode_velocityData(const uint16_t velocity) {
   return decodedVelocity;
 }
 
+/**
+ * Encode RPM Data
+ *  - resolution = 0.125 bit/RPM
+ *  - maxValue = 8032 RPM
+ */
 uint16_t encode_rpmData(const uint16_t rpm) {
-  const uint16_t encodedVelocity = rpm;
+  const uint16_t encodedVelocity = rpm >> 3;
   return encodedVelocity;
 }
 
+/**
+ * Decode RPM Data
+ *  - resolution = 0.125 bit/RPM
+ *  - maxValue = 8032 RPM
+ */
 uint16_t decode_rpmData(const uint16_t rpm) {
-  const uint16_t decodedVelocity = rpm;
+  const uint16_t decodedVelocity = rpm << 3;
   return decodedVelocity;
 }
