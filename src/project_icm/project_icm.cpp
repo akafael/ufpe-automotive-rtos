@@ -48,10 +48,26 @@ TASK(periodicTaskReadCANMsg) {
       const uint8_t gear = decode_gearData(rxBuffer[0]);
       currentGear = eval_gear(gear);
     } else if (msgId == IdMsgRPM) {
-      const uint16_t rpm = decode_rpmData(rxBuffer[1]);
+      union {
+        uint16_t value;
+        uint8_t bytes[2];
+      } data;
+
+      data.bytes[1] = rxBuffer[1];
+      data.bytes[0] = rxBuffer[0];
+
+      const uint16_t rpm = decode_rpmData(data.value);
       currentRPM = eval_rpm(currentGear, rpm);
     } else if (msgId == IdMsgVelocity) {
-      const float velocity = decode_velocityData(rxBuffer[1]);
+      union {
+        uint16_t value;
+        uint8_t bytes[2];
+      } data;
+
+      data.bytes[1] = rxBuffer[1];
+      data.bytes[0] = rxBuffer[0];
+
+      const float velocity = decode_velocityData(data.value);
       currentVelocity = velocity;
     }
   }

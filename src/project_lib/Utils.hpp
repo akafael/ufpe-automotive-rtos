@@ -3,6 +3,7 @@
  * - Stores CAN msgs IDs
  * - Ensure gear, velocity and RPM values are meeting specs
  */
+#pragma once
 #include "Arduino.h"
 
 const uint32_t IdMsgRPM = 0x0CF00400;
