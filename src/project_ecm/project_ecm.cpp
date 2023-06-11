@@ -7,7 +7,8 @@
 #include <SPI.h>
 #include <mcp_can.h>
 
-#include "project_ecm.hpp"
+#include "../project_lib/Board.h"
+#include "../project_lib/Utils.hpp"
 
 #define CAN_SPI_INT 2 // Set INT to pin 2
 MCP_CAN CAN_SPI(10);  // Set CS to pin 10
