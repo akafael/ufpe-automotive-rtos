@@ -31,61 +31,61 @@ CPU test {
   APPMODE stdAppmode {};
   
   ALARM periodicAlRead {
-    COUNTER= SystemCounter;
+    COUNTER= SystemCounter; // Activated each 1024us
     ACTION = ACTIVATETASK {
       TASK = periodicTaskRead;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 200; //activated each 1024 ms
-      CYCLETIME = 500; //activated each 1024 ms
+      ALARMTIME = 200;
+      CYCLETIME = 500;
       APPMODE = stdAppmode;
     };
   };
 
   ALARM periodicAlSendMsgVel {
-    COUNTER= SystemCounter;
+    COUNTER= SystemCounter; // Activated each 1024us
     ACTION = ACTIVATETASK {
       TASK = periodicTaskSendVelocityMsg;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 1000; //activated each 1024 ms
-      CYCLETIME = 1000; //activated each 1024 ms
+      ALARMTIME = 500;
+      CYCLETIME = 250;
       APPMODE = stdAppmode;
     };
   };
 
   ALARM periodicAlSendMsgRPM {
-    COUNTER= SystemCounter;
+    COUNTER= SystemCounter; // Activated each 1024us
     ACTION = ACTIVATETASK {
       TASK = periodicTaskSendRPMMsg;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 1000; //activated each 1024 ms
-      CYCLETIME = 1000; //activated each 1024 ms
+      ALARMTIME = 500;
+      CYCLETIME = 100;
       APPMODE = stdAppmode;
     };
   };
 
   ALARM periodicAlReadGearMsg {
-    COUNTER= SystemCounter;
+    COUNTER= SystemCounter; // Activated each 1024us
     ACTION = ACTIVATETASK {
       TASK = periodicTaskReadGearMsg;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 200; //activated each 1024 ms
-      CYCLETIME = 500; //activated each 1024 ms
+      ALARMTIME = 200;
+      CYCLETIME = 200;
       APPMODE = stdAppmode;
     };
   };
 
   ALARM periodicAlCalcVelocity {
-    COUNTER= SystemCounter;
+    COUNTER= SystemCounter; // Activated each 1024us
     ACTION = ACTIVATETASK {
       TASK = periodicTaskCalcVelocity;
     };
     AUTOSTART = TRUE {
-      ALARMTIME = 200; //activated each 1024 ms
-      CYCLETIME = 500; //activated each 1024 ms
+      ALARMTIME = 200;
+      CYCLETIME = 50;
       APPMODE = stdAppmode;
     };
   };
