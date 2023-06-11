@@ -74,3 +74,13 @@ float calc_velocity(const uint8_t gear, const uint16_t rpm) {
   return (tire_radius * allowed_rpm) /
          (gearbox_ratio[selectedGear] * diferential_ratio);
 }
+
+uint8_t encode_gearData(const uint8_t gear) {
+  const uint8_t encodedGear = gear;
+  return encodedGear;
+}
+
+uint8_t decode_gearData(const uint8_t gear) {
+  const uint8_t decodedGear = gear;
+  return decodedGear;
+}
