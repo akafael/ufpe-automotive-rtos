@@ -1,0 +1,24 @@
+name: Makefile CI
+
+on: [push,pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: sudo apt install git python3 python-is-python3 build-essential avr-libc gcc-avr avrdude
+
+    - name: Configure goil
+      run: cd src && make install_goil
+
+    - name: Configure Arduino
+      run: cd src && make install_arduino_lib install_mcp_can_lib
+
+    - name: Build main project
+      run: cd src && make build
