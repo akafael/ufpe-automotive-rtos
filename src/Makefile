@@ -29,7 +29,7 @@ MCP_CAN_LIB_DIR=${TRAMPOLINE_ARDUINO_DIR}/libraries/mcp_can
 MCP_CAN_LIB_URL=https://github.com/akafael/MCP_CAN_lib.git
 
 # Project names
-PROJECT_NAME=project_ecm
+PROJECT_NAME=trampoline_blink
 PROJECT_BIN_NAME=trampuinoApp
 
 # Project Source Files
