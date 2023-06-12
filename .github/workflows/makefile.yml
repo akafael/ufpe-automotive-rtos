@@ -12,7 +12,7 @@ jobs:
         submodules: recursive
 
     - name: Install dependencies
-      run: sudo apt git python3 python-is-python3 build-essential avr-libc gcc-avr avrdude
+      run: sudo apt install git python3 python-is-python3 build-essential avr-libc gcc-avr avrdude
 
     - name: Configure goil
       run: cd src && make install_goil
