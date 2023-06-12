@@ -8,9 +8,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: srt32/git-actions@v0.0.3
       with:
-       args: git submodule update --init --recursive
+        submodules: recursive
 
     - name: Install dependencies
       run: sudo apt git python3 python-is-python3 build-essential avr-libc gcc-avr avrdude
