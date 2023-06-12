@@ -19,13 +19,17 @@ GOIL_TEMPLATE_DIR=${TRAMPOLINE_DIR}/goil/templates/
 GOIL_FOLDER=${TRAMPOLINE_DIR}/goil/makefile-unix
 GOIL_BIN=${GOIL_FOLDER}/goil
 
-GOIL_TARGET=avr/arduino/uno
+GOIL_TARGET=avr/arduino/mega
 
 # Arduino
 TRAMPOLINE_ARDUINO_DIR=${TRAMPOLINE_DIR}/machines/avr/arduino
 
+# MCP_CAN lib
+MCP_CAN_LIB_DIR=${TRAMPOLINE_ARDUINO_DIR}/libraries/mcp_can
+MCP_CAN_LIB_URL=https://github.com/akafael/MCP_CAN_lib.git
+
 # Project names
-PROJECT_NAME=trampoline_can
+PROJECT_NAME=project_ecm
 PROJECT_BIN_NAME=trampuinoApp
 
 # Project Source Files
@@ -35,7 +39,7 @@ PROJECT_OIL=${PROJECT_DIR}/${PROJECT_NAME}.oil
 PROJECT_HEX=${PROJECT_DIR}/${PROJECT_BIN_NAME}.hex
 
 # SETTINGS
-TARGET_PORT=/dev/ttyACM0
+TARGET_PORT=/dev/ttyUSB0
 
 
 ###############################################################################
@@ -83,13 +87,21 @@ install_arduino_lib: ${TRAMPOLINE_ARDUINO_DIR}
 ${TRAMPOLINE_ARDUINO_DIR}:${TRAMPOLINE_DIR}
 	cd ${TRAMPOLINE_DIR} &&\
 	git submodule init &&\
-	git submodule update --recursive machines/avr/arduino
+	git submodule update --init --recursive machines/avr/arduino
+
+# Install Arduino lib MCP_CAN
+.PHONY: install_mcp_can_lib
+install_mcp_can_lib: ${MCP_CAN_LIB_DIR}
+
+${MCP_CAN_LIB_DIR}: install_arduino_lib
+ 	git clone ${MCP_CAN_LIB_URL} ${MCP_CAN_LIB_DIR}
+
 
 # Upload ----------------------------------------------------------------------
 
 # Upload trampoline code to target
 .PHONY: upload
-upload: ${PROJECT_HEX} ${PROJECT_DIR}/make.py
+upload: ${PROJECT_DIR}/make.py build
 	cd ${PROJECT_DIR} &&\
 	export AVRDUDE_PORT="${TARGET_PORT}"; ${PROJECT_DIR}/make.py flash
 
