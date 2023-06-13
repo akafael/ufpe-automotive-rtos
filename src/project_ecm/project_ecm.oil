@@ -90,6 +90,17 @@ CPU test {
     };
   };
 
+  ALARM periodicAlTaskPrint {
+    COUNTER= SystemCounter; // Activated each 1024us
+    ACTION = ACTIVATETASK {
+      TASK = periodicTaskPrint;
+    };
+    AUTOSTART = TRUE {
+      ALARMTIME = 200;
+      CYCLETIME = 500;
+      APPMODE = stdAppmode;
+    };
+  };
 
   TASK periodicTaskRead {
     PRIORITY = 50;
@@ -125,6 +136,14 @@ CPU test {
 
   TASK periodicTaskReadGearMsg {
     PRIORITY = 60;
+    AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+    STACKSIZE = 128;
+  };
+
+  TASK periodicTaskPrint {
+    PRIORITY = 10;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;

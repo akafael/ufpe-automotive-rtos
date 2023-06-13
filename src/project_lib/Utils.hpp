@@ -4,7 +4,7 @@
  * - Ensure gear, velocity and RPM values are meeting specs
  */
 #pragma once
-#include "Arduino.h"
+#include "stdint.h"
 
 const uint32_t IdMsgRPM = 0x0CF00400;
 const uint32_t IdMsgGear = 0x18F00503;
@@ -54,6 +54,7 @@ float calc_velocity(const uint8_t gear, const uint16_t rpm) {
 
   const float tire_radius = 0.326;      // Tire Effective Radius [meters]
   const float diferential_ratio = 3.55; // Differential Transmition Ratio
+  const float maxVelocity = 250.00;     // Max Velocity Allowed
 
   // Gearbox Transmition Ratio for each gear
   const float gearbox_ratio[] = {
@@ -72,17 +73,23 @@ float calc_velocity(const uint8_t gear, const uint16_t rpm) {
   }
 
   // Calculate velocity
-  return (tire_radius * allowed_rpm) /
-         (gearbox_ratio[selectedGear] * diferential_ratio);
+  const float velocity = (tire_radius * allowed_rpm) /
+                         (gearbox_ratio[selectedGear] * diferential_ratio);
+
+  if (velocity > maxVelocity) {
+    return maxVelocity;
+  }
+
+  return velocity;
 }
 
 uint8_t encode_gearData(const uint8_t gear) {
-  const uint8_t encodedGear = gear;
+  const uint8_t encodedGear = gear + (-127);
   return encodedGear;
 }
 
 uint8_t decode_gearData(const uint8_t gear) {
-  const uint8_t decodedGear = gear;
+  const uint8_t decodedGear = gear - (-127);
   return decodedGear;
 }
 
