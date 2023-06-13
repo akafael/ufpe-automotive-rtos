@@ -2,7 +2,7 @@
 // Automotive Network Evaluation Board v1.1
 // Arquivo: Board.h
 //
-// Arquivo de definicao da pinagem utilizada pela placa dedesenvolvimento.
+// Arquivo de definicao da pinagem utilizada pela placa de desenvolvimento.
 // Utilize este arquivo de definicoes para desenvolver aplicacoes
 //
 /////////////////////////////////////////////////////////////////////////////////

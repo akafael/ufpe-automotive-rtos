@@ -37,19 +37,19 @@ CPU test {
     };
     AUTOSTART = TRUE {
       ALARMTIME = 500;
-      CYCLETIME = 500;
+      CYCLETIME = 100;
       APPMODE = stdAppmode;
     };
   };
 
-  ALARM periodicAlSendMsgGear {
+  ALARM periodicAlTaskPrint {
     COUNTER= SystemCounter; // Activated each 1024us
     ACTION = ACTIVATETASK {
       TASK = periodicTaskPrint;
     };
     AUTOSTART = TRUE {
       ALARMTIME = 200;
-      CYCLETIME = 200;
+      CYCLETIME = 500;
       APPMODE = stdAppmode;
     };
   };

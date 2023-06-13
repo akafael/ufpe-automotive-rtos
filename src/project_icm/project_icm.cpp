@@ -12,7 +12,7 @@
 
 MCP_CAN CAN_SPI(CAN1_CS_PIN); // MCP2515 CAN controler with SPI interface
 
-uint8_t currentGear = 0;
+uint8_t currentGear = 3;
 uint16_t currentRPM = 0;
 float currentVelocity = 0;
 

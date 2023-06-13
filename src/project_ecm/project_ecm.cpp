@@ -61,14 +61,15 @@ TASK(periodicTaskReadGearMsg) {
     // Read Data from CAN
     CAN_SPI.readMsgBuf(&rxId, &dataLenght, rxBuffer);
 
-    // const uint32_t msgId = (rxId & 0x1FFFFFFF);
-    if (rxId == IdMsgGear) {
-      currentGear = eval_gear(rxBuffer[0]);
+    const uint32_t msgId = (rxId & 0x1FFFFFFF);
+    if (msgId == IdMsgGear) {
+      const uint8_t gear = decode_gearData(rxBuffer[0]);
+
+      // Update gear and RPM considering allowed values
+      currentGear = eval_gear(gear);
+      currentRPM = eval_rpm(currentGear, currentRPM);
     }
   }
-
-  Serial.print("[ECM] Gear: ");
-  Serial.println(currentGear);
 
   TerminateTask();
 }
@@ -94,9 +95,6 @@ TASK(periodicTaskSendVelocityMsg) {
   data.value = encode_velocityData(currentVelocity);
   CAN_SPI.sendMsgBuf(IdMsgVelocity, CAN_EXTID, sizeof(data), data.bytes);
 
-  Serial.print("[ECM] Velocity: ");
-  Serial.println(currentVelocity);
-
   TerminateTask();
 }
 
@@ -112,8 +110,21 @@ TASK(periodicTaskSendRPMMsg) {
   data.value = encode_rpmData(currentRPM);
   CAN_SPI.sendMsgBuf(IdMsgRPM, CAN_EXTID, sizeof(data), data.bytes);
 
+  TerminateTask();
+}
+
+/**
+ * Display current internal state
+ */
+TASK(periodicTaskPrint) {
+  Serial.print("[ECM] Gear: ");
+  Serial.println(currentGear);
+
   Serial.print("[ECM] RPM: ");
   Serial.println(currentRPM);
+
+  Serial.print("[ECM] Velocity: ");
+  Serial.println(currentVelocity);
 
   TerminateTask();
 }
